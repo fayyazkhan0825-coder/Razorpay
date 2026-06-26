@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const UserRepository = require('../models/UserRepository');
-
+const db = require('../config/db');
 class AuthService {
   /**
    * Register a new user with name, email, and password.
@@ -37,6 +37,17 @@ class AuthService {
       password_hash: passwordHash,
       role: 'EMP'
     });
+    const defaultRM = await db('users')
+  .where({ role: 'RM' })
+  .first();
+
+if (defaultRM) {
+  await db('employee_rm').insert({
+    employee_id: newUser.id,
+    rm_id: defaultRM.id
+  });
+}
+    
 
     const { password_hash, ...userWithoutPassword } = newUser;
     return userWithoutPassword;
