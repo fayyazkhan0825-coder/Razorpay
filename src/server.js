@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const routes = require('./routes');
@@ -12,6 +13,15 @@ console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_NAME:", process.env.DB_NAME);
 
 const app = express();
+
+// Enable CORS with credentials support (cookies)
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow all origins in dev, or requests without origin (like mobile apps/curl)
+    callback(null, true);
+  },
+  credentials: true
+}));
 
 // Parse JSON and urlencoded request bodies, and cookies
 app.use(express.json());

@@ -75,6 +75,51 @@ class ReimbursementController {
       return next(error);
     }
   }
+
+  /**
+   * Update pending reimbursement
+   */
+  static async update(req, res, next) {
+    try {
+      const reimbursementId = req.params.id;
+      const employeeId = req.user.id;
+
+      const reimbursement = await ReimbursementService.updateReimbursement(
+        employeeId,
+        reimbursementId,
+        req.body
+      );
+
+      return res.status(200).json({
+        status: 'success',
+        data: { reimbursement }
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  /**
+   * Delete pending reimbursement
+   */
+  static async delete(req, res, next) {
+    try {
+      const reimbursementId = req.params.id;
+      const employeeId = req.user.id;
+
+      const result = await ReimbursementService.deleteReimbursement(
+        employeeId,
+        reimbursementId
+      );
+
+      return res.status(200).json({
+        status: 'success',
+        message: result.message
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
 
 module.exports = ReimbursementController;

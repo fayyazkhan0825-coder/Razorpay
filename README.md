@@ -59,3 +59,27 @@ In the `reimbursements` table, rather than storing a single string/integer repre
   * If either `rm_approval_status` or `ape_approval_status` is `'REJECTED'`, the overall status is `'REJECTED'`.
   * If both `rm_approval_status` and `ape_approval_status` are `'APPROVED'`, the overall status is `'APPROVED'`.
   * Otherwise, the overall status is `'PENDING'`.
+
+---
+
+## Frontend Setup & Running Guide
+
+The frontend application is built using React 19, Vite, and Tailwind CSS v4.
+
+### 1. Environment Configuration
+Create a `.env` file in the `frontend/` folder containing the backend URL (an example is provided in `frontend/.env.example`):
+```bash
+VITE_API_URL=https://razorpay-2fdh.onrender.com
+# For local backend debugging, change to: http://localhost:7002
+```
+
+### 2. Monorepo Scripts
+For ease of management, you can run these command scripts directly from the **root workspace directory**:
+- **Run Frontend Dev Server (port 5173):** `npm run dev:frontend`
+- **Build Frontend Assets (production):** `npm run build:frontend`
+- **Run Backend Dev Server (port 7002):** `npm run dev`
+
+Alternatively, navigate inside the `frontend/` directory and run standard Vite scripts:
+- **Start Dev Server:** `npm run dev`
+- **Build Production Bundle:** `npm run build`
+- **Preview Build locally:** `npm run preview`

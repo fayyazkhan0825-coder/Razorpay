@@ -97,6 +97,25 @@ class ReimbursementRepository {
       .where({ ape_approval_status: 'APPROVED' })
       .orderBy('created_at', 'desc');
   }
+
+  /**
+   * Update a reimbursement record by ID
+   */
+  static async update(id, data) {
+    return db('reimbursements')
+      .where({ id })
+      .update(data)
+      .returning('*');
+  }
+
+  /**
+   * Delete a reimbursement record by ID
+   */
+  static async delete(id) {
+    return db('reimbursements')
+      .where({ id })
+      .del();
+  }
 }
 
 module.exports = ReimbursementRepository;

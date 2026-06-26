@@ -1,5 +1,6 @@
 const express = require('express');
 const AuthController = require('../controllers/authController');
+const { authenticateUser } = require('../middleware/auth');
 const { validateBody } = require('../middleware/validation');
 
 const router = express.Router();
@@ -24,5 +25,17 @@ router.post(
 );
 
 router.post('/logout', AuthController.logout);
+
+// Profile endpoints
+router.get('/profile', authenticateUser, AuthController.getProfile);
+router.put(
+  '/profile',
+  authenticateUser,
+  validateBody({
+    name: { required: false, type: 'string', notEmpty: true },
+    password: { required: false, type: 'string', notEmpty: true }
+  }),
+  AuthController.updateProfile
+);
 
 module.exports = router;

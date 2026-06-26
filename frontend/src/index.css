@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #6C3BFF;
+  --color-primary-dark: #542BD6;
+  --color-primary-light: #ECE7FF;
+  
+  --color-secondary: #8B5CF6;
+  --color-secondary-dark: #7C3AED;
+  --color-secondary-light: #EDE9FE;
+  
+  --color-bg: #F8FAFC;
+  --color-bg-dark: #0F172A;
+  
+  --color-card: #FFFFFF;
+  --color-card-dark: #1E293B;
+  
+  --color-success: #22C55E;
+  --color-danger: #EF4444;
+  --color-warning: #F59E0B;
+  --color-darkGray: #1F2937;
+  
+  --shadow-premium: 0 4px 20px -2px rgba(108, 59, 255, 0.06), 0 2px 12px -2px rgba(0, 0, 0, 0.03);
+  --shadow-premium-hover: 0 12px 30px -3px rgba(108, 59, 255, 0.15), 0 6px 20px -3px rgba(0, 0, 0, 0.05);
+  
+  --font-sans: 'Inter', 'Outfit', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-slate-800 dark:bg-bg-dark dark:text-slate-200 font-sans transition-colors duration-300;
+  }
+  
+  html, body, #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Premium Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700 rounded-full hover:bg-primary/50;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Page transitions */
+.fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom form element inputs styling */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #6C3BFF;
+  box-shadow: 0 0 0 3px rgba(108, 59, 255, 0.15);
+}

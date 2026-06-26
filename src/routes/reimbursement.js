@@ -35,4 +35,23 @@ router.patch(
   ReimbursementController.updateStatus
 );
 
+// Update pending reimbursement - Only EMP can edit their own pending reimbursement
+router.put(
+  '/:id',
+  requireRole('EMP'),
+  validateBody({
+    title: { required: true, type: 'string', notEmpty: true },
+    description: { required: false, type: 'string' },
+    amount: { required: true, type: 'amount' }
+  }),
+  ReimbursementController.update
+);
+
+// Delete pending reimbursement - Only EMP can delete their own pending reimbursement
+router.delete(
+  '/:id',
+  requireRole('EMP'),
+  ReimbursementController.delete
+);
+
 module.exports = router;

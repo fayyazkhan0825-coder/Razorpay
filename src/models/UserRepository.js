@@ -72,6 +72,16 @@ class UserRepository {
     return db('users')
       .select('id as userId', 'name', 'email', 'role');
   }
+
+  /**
+   * Update user details
+   */
+  static async update(userId, data) {
+    return db('users')
+      .where({ id: userId })
+      .update(data)
+      .returning('*');
+  }
 }
 
 module.exports = UserRepository;

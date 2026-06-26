@@ -260,6 +260,86 @@ class ReimbursementService {
 
     return ReimbursementService.deriveStatus(updatedRecord);
   }
+
+  /**
+   * Update a pending reimbursement (Only if status is PENDING and owned by caller)
+   */
+  static async updateReimbursement(employeeId, reimbursementId, data) {
+    const reimbursement = await ReimbursementRepository.findById(reimbursementId);
+    if (!reimbursement) {
+      const err = new Error('Reimbursement not found.');
+      err.statusCode = 404;
+      throw err;
+    }
+
+    if (reimbursement.employee_id !== employeeId) {
+      const err = new Error('Access denied. You can only edit your own reimbursements.');
+      err.statusCode = 403;
+      throw err;
+    }
+
+    // Verify overall status is still pending
+    const derived = ReimbursementService.deriveStatus(reimbursement);
+    if (derived.status !== 'PENDING') {
+      const err = new Error('Action rejected. Only pending reimbursements can be modified.');
+      err.statusCode = 400;
+      throw err;
+    }
+
+    const { title, description, amount } = data;
+    const updates = {};
+    if (title && title.trim()) {
+      updates.title = title.trim();
+    }
+    if (description !== undefined) {
+      updates.description = description ? description.trim() : null;
+    }
+    if (amount !== undefined && amount !== null) {
+      const numericAmount = Number(amount);
+      if (isNaN(numericAmount) || numericAmount <= 0) {
+        const err = new Error('Amount must be a positive number.');
+        err.statusCode = 400;
+        throw err;
+      }
+      updates.amount = numericAmount;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return derived;
+    }
+
+    const [updatedRecord] = await ReimbursementRepository.update(reimbursementId, updates);
+    return ReimbursementService.deriveStatus(updatedRecord);
+  }
+
+  /**
+   * Delete a pending reimbursement (Only if status is PENDING and owned by caller)
+   */
+  static async deleteReimbursement(employeeId, reimbursementId) {
+    const reimbursement = await ReimbursementRepository.findById(reimbursementId);
+    if (!reimbursement) {
+      const err = new Error('Reimbursement not found.');
+      err.statusCode = 404;
+      throw err;
+    }
+
+    if (reimbursement.employee_id !== employeeId) {
+      const err = new Error('Access denied. You can only delete your own reimbursements.');
+      err.statusCode = 403;
+      throw err;
+    }
+
+    // Verify overall status is still pending
+    const derived = ReimbursementService.deriveStatus(reimbursement);
+    if (derived.status !== 'PENDING') {
+      const err = new Error('Action rejected. Only pending reimbursements can be deleted.');
+      err.statusCode = 400;
+      throw err;
+    }
+
+    await ReimbursementRepository.delete(reimbursementId);
+    return { success: true, message: 'Reimbursement deleted successfully.' };
+  }
 }
 
 module.exports = ReimbursementService;
