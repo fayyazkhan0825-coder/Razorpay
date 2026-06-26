@@ -26,10 +26,10 @@ const authenticateUser = (req, res, next) => {
   } catch (error) {
     // Clear cookie on verification failure
     res.clearCookie('auth_token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
-    });
+  httpOnly: true,
+  secure: true,
+  sameSite: 'none'
+});
     
     return res.status(401).json({
       status: 'error',

@@ -16,10 +16,7 @@ const app = express();
 
 // Enable CORS with credentials support (cookies)
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow all origins in dev, or requests without origin (like mobile apps/curl)
-    callback(null, true);
-  },
+  origin: "https://razorpay-1-ba71.onrender.com",
   credentials: true
 }));
 
