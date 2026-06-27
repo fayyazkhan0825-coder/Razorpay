@@ -18,11 +18,11 @@ const app = express();
 // ================= CORS =================
 const allowedOrigins = [
   "https://razorpay-mu-pearl.vercel.app",
-  "https://razorpay-1-ba71.onrender.com",
+  "https://razorpay-2-h8l0.onrender.com",
   "http://localhost:5173"
 ];
 
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -30,9 +30,15 @@ app.use(cors({
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true
-}));
-// ========================================
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options("*", cors(corsOptions));
 
 // Parse request body
 app.use(express.json());
@@ -53,10 +59,7 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 // Server
-const PORT =
-  process.env.NODE_ENV === 'production'
-    ? (process.env.PORT || 7002)
-    : 7002;
+const PORT = process.env.PORT || 7002;
 
 const server = app.listen(PORT, () => {
   console.log(
