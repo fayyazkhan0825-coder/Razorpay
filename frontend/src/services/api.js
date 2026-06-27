@@ -1,22 +1,19 @@
 import axios from 'axios';
 
-// Create an Axios instance pointing to the backend API
+// Axios instance
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://razorpay-2fdh.onrender.com',
-  withCredentials: true, // Crucial for receiving/sending HTTP-only cookies
+  baseURL: import.meta.env.VITE_API_URL || 'https://razorpay-2-h8l0.onrender.com',
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
-  }
+  },
 });
 
-// Response interceptor to handle errors globally
+// Response interceptor
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // If the backend returns 401 (Unauthorized), we can handle it or pass it along.
-    // The AuthContext will intercept this to clean up user state if needed.
-    const message = error.response?.data?.message || 'Something went wrong';
-    console.error('[API Error]:', message);
+    console.error('[API Error]', error.response?.data || error.message);
     return Promise.reject(error);
   }
 );
